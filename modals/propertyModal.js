@@ -1,21 +1,16 @@
 const mongoose = require("mongoose");
 const propertySchema = new mongoose.Schema({
-  sellerId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
   title: {
     type: String,
   },
   description: {
     type: String,
-    required: true,
+    // required: true,
   },
   images: [
     {
       type: String,
-      required: true,
+      // required: true,
       default: "default.jpg",
     },
   ],

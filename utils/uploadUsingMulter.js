@@ -11,7 +11,7 @@ const userStorage = multer.diskStorage({
   },
 });
 
-const postStorage = multer.diskStorage({
+const propertyStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "public/properties");
   },
@@ -36,9 +36,9 @@ const uploadUser = multer({
 });
 exports.uploadUserPhotos = uploadUser.single("photo");
 
-const uploadPost = multer({
-  storage: postStorage,
+const uploadProperty = multer({
+  storage: propertyStorage,
   fileFilter: multerFilter,
 });
 
-exports.uploadPostPhotos = uploadPost.array("image", 10);
+exports.uploadPropertyPhotos = uploadProperty.array("image", 10);

@@ -7,6 +7,8 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const { signToken } = require("./authController");
 const sendEmail = require("../utils/email");
+const Booking = require("../models/bookingModel");
+const Property = require("../models/propertyModal");
 
 const filterObj = (obj, ...allowedfields) => {
   const newObj = {};

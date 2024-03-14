@@ -3,6 +3,7 @@ const router = express.Router();
 const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
 const uploadUsingMulter = require("../utils/uploadUsingMulter");
+const bookingcontroller = require("../controllers/bookingController");
 
 router.post("/signup", userController.signup);
 router.post("/verifyOtp/:otp", userController.verifyOtp);
@@ -15,7 +16,6 @@ router.patch(
   userController.updateUser
 );
 router.delete("/deleteUser", authController.protect, userController.deleteUser);
-
 router.post("/login", userController.loginUser);
 router.get("/logout", userController.logout);
 router.post("/forgetPassword", userController.forgetPassword);

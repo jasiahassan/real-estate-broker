@@ -6,12 +6,12 @@ const propertySchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: true,
+    // required: true,
   },
   images: [
     {
       type: String,
-      required: true,
+      // required: true,
       default: "default.jpg",
     },
   ],

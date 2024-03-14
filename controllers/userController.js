@@ -1,4 +1,4 @@
-const User = require("../models/userModal");
+const User = require("../modals/userModal");
 const fs = require("fs");
 const { promisify } = require("util");
 const unlinkAsync = promisify(fs.unlink);
@@ -56,7 +56,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   }
 
   otp = Math.floor(1000 + Math.random() * 9000).toString();
-  const message = `Your one time registration code is "${otp}"`;
+  // const message = `Your one time registration code is "${otp}"`;
   //   await sendEmail({
   //     email: req.body.email,
   //     subject: "Your OTP is valid for 10 minutes",
@@ -129,9 +129,12 @@ exports.updateUser = catchAsync(async (req, res, next) => {
     "isPublic"
   );
   if (req.user.photo) {
-    await unlinkAsync(req.user.photo);
+    try {
+      await unlinkAsync(req.user.photo);
+    } catch (err) {
+      console.error(`no photo found`);
+    }
   }
-
   if (req.file) {
     filteredbody.photo = req.file.path;
   }

@@ -24,6 +24,7 @@ const reviewSchema = new mongoose.Schema({
 const propertySchema = new mongoose.Schema({
   title: {
     type: String,
+    required: true,
   },
   description: {
     type: String,

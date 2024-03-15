@@ -21,13 +21,3 @@ exports.getAllProperties = catchAsync(async (req, res, next) => {
     },
   });
 });
-
-exports.addproperty = catchAsync(async (req, res, next) => {
-  const property = await Property.create(req.body);
-  res.status(201).json({
-    status: "success",
-    data: {
-      property,
-    },
-  });
-});

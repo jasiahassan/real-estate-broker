@@ -1,6 +1,7 @@
 const Booking = require("../modals/bookingModel");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
+const sendEmail = require("../utils/email");
 
 exports.createBooking = catchAsync(async (req, res, next) => {
   const propertyId = req.params.id;
@@ -8,6 +9,13 @@ exports.createBooking = catchAsync(async (req, res, next) => {
   const newBooking = await Booking.create({
     propertyId,
     userId,
+  });
+  console.log(newBooking);
+  const message = `${req.user.name} has requested for a booking, click here to accept: 127.0.0.1:8000/api/v1/seller/confirmbooking/${newBooking._id}"`;
+  await sendEmail({
+    email: "jasiahassan120@gmail.com",
+    subject: "booking request",
+    message,
   });
   res.status(201).json({
     status: "success",

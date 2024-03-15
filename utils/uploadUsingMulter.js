@@ -15,7 +15,7 @@ const userStorage = multer.diskStorage({
 // Storage for Property photos
 const propertyPhotoStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/images");
+    cb(null, "uploads/properties");
   },
   filename: (req, file, cb) => {
     const ext = file.mimetype.split("/")[1];
@@ -38,7 +38,7 @@ const propertyVideoStorage = multer.diskStorage({
 
 // MulterFilter for Photos
 const multerFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith("images")) {
+  if (file.mimetype.startsWith("image")) {
     cb(null, true);
   } else {
     cb(new Error("Not an image! Please upload only images"), false);
@@ -66,14 +66,10 @@ const uploadProperty = multer({
   storage: propertyPhotoStorage,
   fileFilter: multerFilter,
 });
+exports.uploadPropertyPhotos = uploadProperty.array("images", 10);
 
-exports.uploadProperty = uploadProperty.array("images", 10);
-
-// Property Videos
-const uploadVideo = multer({
+const uploadPropertyVedio = multer({
   storage: propertyVideoStorage,
-  limits: { fileSize: 50000000 },
   fileFilter: multerFilterVideo,
 });
-
-exports.uploadVideos = uploadVideo.single("video");
+exports.uploadVideos = uploadPropertyVedio.array("vedio", 5);

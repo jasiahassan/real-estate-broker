@@ -2,10 +2,8 @@ const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./database/db");
 const userRouter = require("./routes/userRoutes");
-const propertyRouter = require("./routes/PropertyRoutes");
 const sellerRouter = require("./routes/adminRoutes");
 const AppError = require("./utils/appError");
-const bookingRouter = require("./routes/bookingRoutes");
 const globalErrorHandler = require("./controllers/errorController");
 require("./controllers/seeding");
 
@@ -18,9 +16,7 @@ const app = express();
 // Middlewares
 app.use(express.json());
 app.use("/api/v1/users", userRouter);
-app.use("/api/v1/properties", propertyRouter);
-app.use("/api/v1/user", bookingRouter);
-app.use("/api/v1/seller", sellerRouter);
+app.use("/api/v1/admin", sellerRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Cannot find ${req.originalUrl} on this server`, 404));

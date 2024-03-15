@@ -58,3 +58,16 @@ exports.acceptPropertyVisit = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+exports.getPendingBookings = catchAsync(async (req, res, next) => {
+  const bookings = await Booking.find({ status: "pending" });
+  if (bookings.length < 1) {
+    return next(new AppError("There are no pending bookings", 404));
+  }
+  res.status(200).json({
+    status: "success",
+    data: {
+      bookings,
+    },
+  });
+});

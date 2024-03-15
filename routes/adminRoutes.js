@@ -2,34 +2,22 @@ const express = require("express");
 const router = express.Router();
 const authController = require("../controllers/authController");
 const uploadUsingMulter = require("../utils/uploadUsingMulter");
-const bookingController = require("../controllers/bookingController");
-const sellercontroller = require("../controllers/adminControler");
+const adminController = require("../controllers/adminControler");
 
+router.use(authController.protect, authController.checkAdmin);
+
+// Property Routes
 router.post(
-  "/addproperty",
-  authController.protect,
-  authController.checkAdmin,
+  "/properties",
   uploadUsingMulter.uploadPropertyPhotos,
   uploadUsingMulter.uploadVideos,
-  sellercontroller.addProperty
+  adminController.addProperty
 );
 
-router.delete(
-  "/deleteproperty/:id",
-  authController.protect,
-  authController.checkAdmin,
-  sellercontroller.deleteProperty
-);
-router.get(
-  "/getpendingbookings",
-  authController.protect,
-  authController.checkAdmin,
-  bookingController.getPendingBookings
-);
-router.patch(
-  "/confirmbooking/:id",
-  authController.protect,
-  authController.checkAdmin,
-  sellercontroller.acceptPropertyVisit
-);
+router.delete("/properties/:id", adminController.deleteProperty);
+
+// Booking Routes
+router.get("/bookings/pending", adminController.getPendingBookings);
+router.patch("/bookings/:id/confirm", adminController.acceptPropertyVisit);
+
 module.exports = router;

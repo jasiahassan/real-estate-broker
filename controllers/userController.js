@@ -7,8 +7,8 @@ const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const { signToken } = require("./authController");
 const sendEmail = require("../utils/email");
-const Booking = require("../models/bookingModel");
-const Property = require("../models/propertyModal");
+const Booking = require("../modals/bookingModel");
+const Property = require("../modals/propertyModal");
 
 const filterObj = (obj, ...allowedfields) => {
   const newObj = {};
@@ -280,5 +280,80 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     token,
+  });
+});
+
+exports.review = catchAsync(async (req, res, next) => {
+  const propertyId = req.params.id;
+  const { rating, comment } = req.body;
+  const userId = req.user.id; // Assuming user ID is available in req.user
+
+  const property = await Property.findById(propertyId);
+  if (!property) {
+    return res.status(404).json({ error: "Property not found" });
+  }
+
+  property.ratings.push({ user: userId, rating, comment });
+  await property.save();
+
+  return res.status(201).json({
+    Status: "Success",
+    Message: "Review Added",
+  });
+});
+
+exports.updateRatingAndReview = async (req, res) => {
+  const { propertyId, reviewId } = req.params;
+  const { rating, comment } = req.body;
+
+  const property = await Property.findById(propertyId);
+  if (!property) {
+    return res.status(404).json({ error: "Property not found" });
+  }
+
+  const reviewToUpdate = property.ratings.id(reviewId);
+  if (!reviewToUpdate) {
+    return res.status(404).json({ error: "Review not found" });
+  }
+  reviewToUpdate.rating = rating;
+  reviewToUpdate.comment = comment;
+  await property.save();
+
+  res.status(200).json({
+    status: "Success",
+    Message: "Review Changed",
+    property,
+  });
+};
+
+exports.deleteReview = catchAsync(async (req, res, next) => {
+  const propertyId = req.params.propertyId;
+  const reviewId = req.params.reviewId;
+  const userId = req.user.id;
+
+  const property = await Property.findById(propertyId);
+  if (!property) {
+    return res.status(404).json({ error: "Property not found" });
+  }
+
+  const reviewIndex = property.ratings.findIndex(
+    (review) => review._id.toString() === reviewId
+  );
+  if (reviewIndex === -1) {
+    return res.status(404).json({ error: "Review not found" });
+  }
+
+  const reviewToDelete = property.ratings[reviewIndex];
+  if (reviewToDelete.user.toString() !== userId) {
+    return res
+      .status(403)
+      .json({ error: "You are not authorized to delete this review" });
+  }
+  property.ratings.splice(reviewIndex, 1);
+  await property.save();
+
+  return res.status(204).json({
+    Status: "Success",
+    Message: "Review Deleted",
   });
 });

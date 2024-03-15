@@ -1,5 +1,26 @@
 const mongoose = require("mongoose");
 const User = require("./userModal");
+
+const reviewSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+  rating: {
+    type: Number,
+    required: true,
+    min: 1,
+    max: 5,
+  },
+  comment: {
+    type: String,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
 const propertySchema = new mongoose.Schema({
   title: {
     type: String,
@@ -34,6 +55,7 @@ const propertySchema = new mongoose.Schema({
   video: {
     type: String,
   },
+  ratings: [reviewSchema],
 });
 
 const Property = mongoose.model("Property", propertySchema);

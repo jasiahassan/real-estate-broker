@@ -3,7 +3,6 @@ const router = express.Router();
 const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
 const uploadUsingMulter = require("../utils/uploadUsingMulter");
-const bookingcontroller = require("../controllers/bookingController");
 
 router.post("/signup", userController.signup);
 router.post("/verifyOtp/:otp", userController.verifyOtp);
@@ -25,5 +24,20 @@ router.patch(
   authController.protect,
   userController.updatePassword
 );
-
+router.post("/review/:id", authController.protect, userController.review);
+router.post(
+  "/updatereview/:propertyid/reviewid",
+  authController.protect,
+  userController.review
+);
+router.put(
+  "/updatereview/:propertyId/:reviewId",
+  authController.protect,
+  userController.updateRatingAndReview
+);
+router.delete(
+  "/deletereview/:propertyId/:reviewId",
+  authController.protect,
+  userController.deleteReview
+);
 module.exports = router;

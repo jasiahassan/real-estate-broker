@@ -1,15 +1,21 @@
 const catchAsync = require("../utils/catchAsync");
-const Property = require("../models/propertyModal");
-const Booking = require("../models/bookingModel");
+const Property = require("../modals/propertyModal");
+const Booking = require("../modals/bookingModel");
+const AppError = require("../utils/appError");
+const { findOne } = require("../modals/userModal");
 
 exports.addProperty = catchAsync(async (req, res, next) => {
   const { title, description, location, price, type } = req.body;
-
+  console.log(title, type);
+  const propertyCheck = await Property.findOne({ title: title });
+  if (propertyCheck) {
+    return next(new AppError("Property already exists", 400));
+  }
   const images = req.files.map((file) => file.path);
 
   // const video = req.file ? req.file.path : null;
 
-  const newProperty = new Property({
+  const newProperty = await Property.create({
     title,
     description,
     location,
@@ -19,7 +25,6 @@ exports.addProperty = catchAsync(async (req, res, next) => {
     // video,
   });
 
-  await newProperty.save();
   res.status(201).json({
     status: "success",
     message: "Property added successfully",

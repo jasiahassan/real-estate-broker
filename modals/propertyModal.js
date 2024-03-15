@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
+const User = require("./userModal");
 const propertySchema = new mongoose.Schema({
   title: {
     type: String,
+    required: true,
   },
   description: {
     type: String,
@@ -29,6 +31,9 @@ const propertySchema = new mongoose.Schema({
   type: {
     type: String,
     enum: ["sell", "rent"],
+  },
+  video: {
+    type: String,
   },
 });
 

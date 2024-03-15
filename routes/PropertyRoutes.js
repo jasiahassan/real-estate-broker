@@ -3,7 +3,10 @@ const router = express.Router();
 const authController = require("../controllers/authController");
 const propertyController = require("../controllers/propertyController");
 
-router.post("/AddProperty", propertyController.addproperty);
-router.get("/getAllProperties", propertyController.getAllProperties);
+router.get(
+  "/getAllProperties",
+  authController.protect,
+  propertyController.getAllProperties
+);
 
 module.exports = router;
